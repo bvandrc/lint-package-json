@@ -1,0 +1,16 @@
+name: Check package.json key order
+description: Checks that package.json top-level keys follow the canonical order, via npm-package-json-lint
+branding:
+  icon: check-square
+  color: green
+inputs:
+  directory:
+    description: Directory to lint (recursively finds all package.json files, excluding node_modules)
+    required: false
+    default: .
+runs:
+  using: composite
+  steps:
+    - name: Check package.json key order
+      shell: bash
+      run: npx --yes npm-package-json-lint --configFile "${{ github.action_path }}/.npmpackagejsonlintrc.json" "${{ inputs.directory }}"
