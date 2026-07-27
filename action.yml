@@ -1,4 +1,4 @@
-name: Lint package.json
+name: Check package.json key order
 description: Checks that package.json top-level keys follow the canonical order, via npm-package-json-lint
 inputs:
   directory:
