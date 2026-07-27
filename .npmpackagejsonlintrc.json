@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "prefer-property-order": [
+      "error",
+      [
+        "name",
+        "version",
+        "private",
+        "description",
+        "keywords",
+        "homepage",
+        "bugs",
+        "repository",
+        "author",
+        "license",
+        "type",
+        "source",
+        "main",
+        "exports",
+        "files",
+        "engines",
+        "packageManager",
+        "scripts",
+        "dependencies",
+        "peerDependencies",
+        "peerDependenciesMeta",
+        "devDependencies",
+        "overrides"
+      ]
+    ]
+  }
+}
