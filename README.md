@@ -42,6 +42,11 @@ config blocks won't fail the lint.
 `config-file` **merges** with the defaults per-rule rather than replacing them. Any rule you don't
 name keeps its default; set a rule to `"off"` to switch it off.
 
+The file uses npm-package-json-lint's own
+[configuration format](https://npmpackagejsonlint.org/docs/configuration/) — note that `extends`
+won't pull in this action's defaults, since they aren't published as a package; the `config-file`
+merge is what carries them over.
+
 ```yaml
 - uses: bvandrc/lint-package-json@v2
   with:
