@@ -26,6 +26,9 @@ runs:
         TARGET_DIR: ${{ inputs.directory }}
       run: |
         set -euo pipefail
+
+        # Merge the caller's config over the defaults, if one was supplied.
+        # Per-rule: anything they don't name keeps its default.
         CONFIG="$BASE_CONFIG"
         if [ -n "$OVERRIDE_CONFIG" ]; then
           if [ ! -f "$OVERRIDE_CONFIG" ]; then
@@ -41,4 +44,6 @@ runs:
             fs.writeFileSync(out, JSON.stringify({ ...b, ...o, rules: { ...b.rules, ...o.rules } }));
           ' "$BASE_CONFIG" "$OVERRIDE_CONFIG" "$CONFIG"
         fi
+
+        # Execute the lint.
         npx --yes npm-package-json-lint --configFile "$CONFIG" "$TARGET_DIR"
