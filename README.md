@@ -8,7 +8,7 @@ consuming repo picks it up.
 ## Usage
 
 ```yaml
-- uses: bvandrc/lint-package-json@v1
+- uses: bvandrc/lint-package-json@v2
 ```
 
 Lints every `package.json` under the target directory (excluding `node_modules`). Requires Node on
@@ -45,7 +45,7 @@ capital letter), `valid-values-license` (a common SPDX allowlist plus `UNLICENSE
 name keeps its default; set a rule to `"off"` to switch it off.
 
 ```yaml
-- uses: bvandrc/lint-package-json@v1
+- uses: bvandrc/lint-package-json@v2
   with:
     config-file: .github/package-json-lint-overrides.json
 ```
@@ -65,3 +65,34 @@ above still applies.
 Two rules are the most likely to need overriding: `valid-values-license` if you ship under a
 license outside the allowlist, and `require-license` / `require-repository` for private or
 internal packages that legitimately omit them.
+
+## Upgrading from v1
+
+v1 enforced key order only. v2 adds required-field, format, value, and alphabetical-ordering
+rules, so repos that passed under v1 can fail under v2 without their `package.json` changing.
+
+Either fix the new findings, or pin the rules back to v1 behaviour with a `config-file` that turns
+off everything except key order:
+
+```json
+{
+  "rules": {
+    "require-name": "off",
+    "require-version": "off",
+    "require-description": "off",
+    "require-license": "off",
+    "require-repository": "off",
+    "name-format": "off",
+    "version-format": "off",
+    "description-format": "off",
+    "valid-values-license": "off",
+    "valid-values-private": "off",
+    "no-duplicate-properties": "off",
+    "prefer-alphabetical-dependencies": "off",
+    "prefer-alphabetical-devDependencies": "off"
+  }
+}
+```
+
+The v2 key order list is also wider than v1's, so keys like `exports`, `types`, and `workspaces`
+are now order-enforced where v1 ignored them.
