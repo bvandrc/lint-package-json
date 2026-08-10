@@ -23,12 +23,10 @@ classic and modern fields (`exports`, `types`, `sideEffects`, `workspaces`, `pub
 `browserslist`, and friends). Keys *not* in the list are ignored rather than rejected, so tool
 config blocks won't fail the lint.
 
-**Required fields** — `require-name`, `require-version`, `require-description`, `require-license`,
-`require-repository`.
+**Required fields** — `require-name`, `require-version`, `require-license`.
 
-**Values and formats** — `name-format`, `version-format`, `description-format` (must start with a
-capital letter), `valid-values-license` (a common SPDX allowlist plus `UNLICENSED`),
-`valid-values-private`, `no-duplicate-properties`.
+**Values and formats** — `name-format`, `version-format`, `valid-values-private`,
+`no-duplicate-properties`.
 
 **Alphabetical** — `prefer-alphabetical-dependencies`, `prefer-alphabetical-devDependencies`.
 
@@ -62,9 +60,9 @@ name keeps its default; set a rule to `"off"` to switch it off.
 That example swaps in a custom key order and drops the license requirement — every other rule
 above still applies.
 
-Two rules are the most likely to need overriding: `valid-values-license` if you ship under a
-license outside the allowlist, and `require-license` / `require-repository` for private or
-internal packages that legitimately omit them.
+The most likely rules to need overriding are `prefer-alphabetical-dependencies` /
+`prefer-alphabetical-devDependencies` if you don't keep deps sorted, and `require-license` for
+private or internal packages that legitimately omit it.
 
 ## Upgrading from v1
 
@@ -79,13 +77,9 @@ off everything except key order:
   "rules": {
     "require-name": "off",
     "require-version": "off",
-    "require-description": "off",
     "require-license": "off",
-    "require-repository": "off",
     "name-format": "off",
     "version-format": "off",
-    "description-format": "off",
-    "valid-values-license": "off",
     "valid-values-private": "off",
     "no-duplicate-properties": "off",
     "prefer-alphabetical-dependencies": "off",
