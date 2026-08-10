@@ -1,5 +1,5 @@
-name: Check package.json key order
-description: Checks that package.json top-level keys follow the canonical order, via npm-package-json-lint
+name: Lint package.json
+description: Lints package.json files against a shared npm-package-json-lint rule set — key order, required fields, value formats, and alphabetized dependencies. Consumers can override individual rules.
 branding:
   icon: check-square
   color: green
@@ -8,9 +8,36 @@ inputs:
     description: Directory to lint (recursively finds all package.json files, excluding node_modules)
     required: false
     default: .
+  config-file:
+    description: >-
+      Path to a npm-package-json-lint config whose rules override the defaults. Rules are merged
+      per-rule: anything you don't name keeps its default. Set a rule to "off" to disable it.
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
-    - name: Check package.json key order
+    - name: Lint
       shell: bash
-      run: npx --yes npm-package-json-lint --configFile "${{ github.action_path }}/.npmpackagejsonlintrc.json" "${{ inputs.directory }}"
+      env:
+        BASE_CONFIG: ${{ github.action_path }}/.npmpackagejsonlintrc.json
+        OVERRIDE_CONFIG: ${{ inputs.config-file }}
+        TARGET_DIR: ${{ inputs.directory }}
+      run: |
+        set -euo pipefail
+        CONFIG="$BASE_CONFIG"
+        if [ -n "$OVERRIDE_CONFIG" ]; then
+          if [ ! -f "$OVERRIDE_CONFIG" ]; then
+            echo "::error::config-file not found: $OVERRIDE_CONFIG"
+            exit 1
+          fi
+          CONFIG="$RUNNER_TEMP/npmpackagejsonlintrc.merged.json"
+          node -e '
+            const fs = require("fs");
+            const [base, over, out] = process.argv.slice(1);
+            const b = JSON.parse(fs.readFileSync(base, "utf8"));
+            const o = JSON.parse(fs.readFileSync(over, "utf8"));
+            fs.writeFileSync(out, JSON.stringify({ ...b, ...o, rules: { ...b.rules, ...o.rules } }));
+          ' "$BASE_CONFIG" "$OVERRIDE_CONFIG" "$CONFIG"
+        fi
+        npx --yes npm-package-json-lint --configFile "$CONFIG" "$TARGET_DIR"
