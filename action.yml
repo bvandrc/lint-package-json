@@ -12,6 +12,7 @@ inputs:
     description: >-
       Path to a npm-package-json-lint config whose rules override the defaults. Rules are merged
       per-rule: anything you don't name keeps its default. Set a rule to "off" to disable it.
+      Config format: https://npmpackagejsonlint.org/docs/configuration/
     required: false
     default: ''
 runs:
