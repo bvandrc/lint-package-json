@@ -1,9 +1,8 @@
 # lint-package-json
 
 GitHub Action that lints every `package.json` in a repo with
-[npm-package-json-lint](https://npmpackagejsonlint.org/), using a shared rule set that lives in
-this repo's [.npmpackagejsonlintrc.json](.npmpackagejsonlintrc.json) — update it here and every
-consuming repo picks it up.
+[npm-package-json-lint](https://npmpackagejsonlint.org/), against a shared rule set defined in
+[.npmpackagejsonlintrc.json](.npmpackagejsonlintrc.json).
 
 ## Usage
 
@@ -11,24 +10,22 @@ consuming repo picks it up.
 - uses: bvandrc/lint-package-json@v2
 ```
 
-Lints every `package.json` under the target directory (excluding `node_modules`). Requires Node on
-the runner (present on all GitHub-hosted runners); no install step needed.
+Lints every `package.json` under the target directory, excluding `node_modules`.
 
 ## Rules
 
 All rules are `error` severity. Anything you disagree with is overridable — see below.
 
-**Key order** — `prefer-property-order` enforces a canonical top-level key order covering both
-classic and modern fields (`exports`, `types`, `sideEffects`, `workspaces`, `publishConfig`,
-`browserslist`, and friends). Keys *not* in the list are ignored rather than rejected, so tool
-config blocks won't fail the lint.
-
-**Required fields** — `require-name`, `require-version`, `require-license`.
-
-**Values and formats** — `name-format`, `version-format`, `valid-values-private`,
-`no-duplicate-properties`.
-
-**Alphabetical** — `prefer-alphabetical-dependencies`, `prefer-alphabetical-devDependencies`.
+- **Key order** — `prefer-property-order` enforces a canonical top-level key order. Keys *not* in
+  the list are ignored rather than rejected, so tool config blocks won't fail the lint.
+- **Required fields** — `require-name`, `require-version`, `require-license`.
+- **Values and formats**
+  - `name-format` — lowercase only, URL-friendly characters, no leading period
+  - `version-format` — an exact semver version, not a range: `1.0.0` passes, `1.0` and `^1.0.0`
+    don't
+  - `valid-values-private` — `private` must be `true` or `false`
+  - `no-duplicate-properties` — no repeated top-level keys
+- **Alphabetical** — `prefer-alphabetical-dependencies`, `prefer-alphabetical-devDependencies`.
 
 ## Inputs
 
@@ -47,11 +44,15 @@ The file uses npm-package-json-lint's own
 won't pull in this action's defaults, since they aren't published as a package; the `config-file`
 merge is what carries them over.
 
+Point the input at your config:
+
 ```yaml
 - uses: bvandrc/lint-package-json@v2
   with:
     config-file: .github/package-json-lint-overrides.json
 ```
+
+Example override file:
 
 ```json
 {
@@ -64,10 +65,6 @@ merge is what carries them over.
 
 That example swaps in a custom key order and drops the license requirement — every other rule
 above still applies.
-
-The most likely rules to need overriding are `prefer-alphabetical-dependencies` /
-`prefer-alphabetical-devDependencies` if you don't keep deps sorted, and `require-license` for
-private or internal packages that legitimately omit it.
 
 ## Upgrading from v1
 
@@ -92,6 +89,3 @@ off everything except key order:
   }
 }
 ```
-
-The v2 key order list is also wider than v1's, so keys like `exports`, `types`, and `workspaces`
-are now order-enforced where v1 ignored them.
