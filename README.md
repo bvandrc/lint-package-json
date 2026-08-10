@@ -16,16 +16,18 @@ Lints every `package.json` under the target directory, excluding `node_modules`.
 
 All rules are `error` severity. Anything you disagree with is overridable — see below.
 
-- **Key order** — `prefer-property-order` enforces a canonical top-level key order. Keys *not* in
-  the list are ignored rather than rejected, so tool config blocks won't fail the lint.
-- **Required fields** — `require-name`, `require-version`, `require-license`.
-- **Values and formats**
-  - `name-format` — lowercase only, URL-friendly characters, no leading period
-  - `version-format` — an exact semver version, not a range: `1.0.0` passes, `1.0` and `^1.0.0`
-    don't
-  - `valid-values-private` — `private` must be `true` or `false`
-  - `no-duplicate-properties` — no repeated top-level keys
-- **Alphabetical** — `prefer-alphabetical-dependencies`, `prefer-alphabetical-devDependencies`.
+| Rule | Enforces |
+| --- | --- |
+| `prefer-property-order` | A canonical top-level key order. Keys *not* in the list are ignored rather than rejected, so tool config blocks won't fail the lint. |
+| `require-name` | `name` is present |
+| `require-version` | `version` is present |
+| `require-license` | `license` is present |
+| `name-format` | Lowercase only, URL-friendly characters, no leading period |
+| `version-format` | An exact semver version, not a range: `1.0.0` passes, `1.0` and `^1.0.0` don't |
+| `valid-values-private` | `private` is `true` or `false` |
+| `no-duplicate-properties` | No repeated top-level keys |
+| `prefer-alphabetical-dependencies` | `dependencies` sorted alphabetically |
+| `prefer-alphabetical-devDependencies` | `devDependencies` sorted alphabetically |
 
 ## Inputs
 
