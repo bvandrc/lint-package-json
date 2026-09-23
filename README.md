@@ -1,8 +1,6 @@
 # lint-package-json
 
-GitHub Action that lints every `package.json` in a repo with
-[npm-package-json-lint](https://npmpackagejsonlint.org/), against a shared rule set defined in
-[.npmpackagejsonlintrc.json](.npmpackagejsonlintrc.json).
+GitHub Action that lints every `package.json` in a repo with [npm-package-json-lint](https://npmpackagejsonlint.org/), against a shared rule set defined in [.npmpackagejsonlintrc.json](.npmpackagejsonlintrc.json).
 
 ## Usage
 
@@ -38,13 +36,9 @@ All rules are `error` severity. Anything you disagree with is overridable — se
 
 ### Overriding rules
 
-`config-file` **merges** with the defaults per-rule rather than replacing them. Any rule you don't
-name keeps its default; set a rule to `"off"` to switch it off.
+`config-file` **merges** with the defaults per-rule rather than replacing them. Any rule you don't name keeps its default; set a rule to `"off"` to switch it off.
 
-The file uses npm-package-json-lint's own
-[configuration format](https://npmpackagejsonlint.org/docs/configuration/) — note that `extends`
-won't pull in this action's defaults, since they aren't published as a package; the `config-file`
-merge is what carries them over.
+The file uses npm-package-json-lint's own [configuration format](https://npmpackagejsonlint.org/docs/configuration/) — note that `extends` won't pull in this action's defaults, since they aren't published as a package; the `config-file` merge is what carries them over.
 
 Point the input at your config:
 
@@ -65,16 +59,13 @@ Example override file:
 }
 ```
 
-That example swaps in a custom key order and drops the license requirement — every other rule
-above still applies.
+That example swaps in a custom key order and drops the license requirement — every other rule above still applies.
 
 ## Upgrading from v1
 
-v1 enforced key order only. v2 adds required-field, format, value, and alphabetical-ordering
-rules, so repos that passed under v1 can fail under v2 without their `package.json` changing.
+v1 enforced key order only. v2 adds required-field, format, value, and alphabetical-ordering rules, so repos that passed under v1 can fail under v2 without their `package.json` changing.
 
-Either fix the new findings, or pin the rules back to v1 behaviour with a `config-file` that turns
-off everything except key order:
+Either fix the new findings, or pin the rules back to v1 behaviour with a `config-file` that turns off everything except key order:
 
 ```json
 {
